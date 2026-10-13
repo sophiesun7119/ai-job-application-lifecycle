@@ -5,26 +5,40 @@
 This is a **connected-assistant workflow**, with three recurring AI task prompts and a shared Google Sheet; it is **not** a single server deployed with the three GitHub repos. Data-producing tasks use authorized Google connectors and web retrieval. Company/job schedules must never write the application-submission table; the inbox tracker must never invent applications.
 
 ```mermaid
-flowchart LR
-    subgraph DISC["Discovery tasks (independently scheduled)"]
-      DC["Company research • daily"] --> CO["Companies"]
-      DJ["Official ATS scan • hourly"] --> OJ["Open Jobs"]
-      DJ --> SS["Scan Status"]
-      DJ --> SR["Scan Runs"]
-    end
-    CO --> DJ
-    subgraph PEOPLE["Human-reviewed application"]
-      OJ --> FIT["Review fit / choose role"]
-      FIT --> CV["Tailor copied resume"]
-      CV --> AP["Human submission"]
-      AP --> A["Sheet1: submitted applications"]
-    end
-    subgraph MAIL["Recruiting follow-up (independently scheduled)"]
-      G["Gmail"] --> IN["Inbox tracker • hourly"]
-      IN <--> A
-      IN --> LAB["Processed/read/starred"]
-    end
+%%{init: {"flowchart": {"nodeSpacing": 64, "rankSpacing": 78, "padding": 30}, "themeVariables": {"fontSize": "17px"}}}%%
+flowchart TB
+    COMPANY["Company Research<br/>Daily task"]
+    CO[("Companies tab<br/>Eligibility and priority")]
+    SOURCE["Official Career Sites<br/>ATS role listings"]
+    SCAN["Job Monitoring<br/>Hourly Tier batches"]
+    OPEN[("Open Jobs tab<br/>Prospective roles")]
+    HEALTH[("Scan Status tab<br/>Company failures")]
+    RUNS[("Scan Runs tab<br/>Batch checkpoints")]
+    REVIEW["Review JD Fit<br/>Select a role"]
+    BASE["Base Resumes<br/>Career Story Bank"]
+    RESUME["Tailor Resume<br/>Copy Doc and check PDF"]
+    HUMAN["Human Submits<br/>Application externally"]
+    APPS[("Sheet1 tab<br/>Submitted applications")]
+    MAIL["Gmail<br/>Recruiting messages"]
+    INBOX["Inbox Tracker<br/>Hourly task"]
+    GMAILA["Gmail Actions<br/>Processed, read, starred"]
+    STAGE["Application Stages<br/>Updates and notes"]
+
+    COMPANY --> CO --> SCAN
+    SOURCE --> SCAN
+    SCAN --> OPEN
+    SCAN -. "Per-company status" .-> HEALTH
+    SCAN -. "Run receipts" .-> RUNS
+    OPEN --> REVIEW --> RESUME
+    BASE --> RESUME
+    RESUME --> HUMAN --> APPS
+    MAIL --> INBOX
+    APPS <--> INBOX
+    INBOX --> GMAILA
+    INBOX --> STAGE
 ```
+
+The vertical diagram above emphasizes **readable, fully wrapped labels** and the writer/reader boundaries. For an expanded annotated lifecycle, use [End-to-End Workflow](end-to-end-workflow.md).
 
 ## Concrete responsibilities and permissions
 

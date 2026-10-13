@@ -20,30 +20,46 @@ A personal engineering project connecting **company discovery → official ATS j
 
 ## Architecture
 
+### End-to-End Workflow
+
+This is the **complete lifecycle diagram**. Its taller layout, shorter labels and wider spacing are intended to remain readable in GitHub Markdown, including on narrower screens. For the annotated stages and write boundaries, see [Full Workflow](docs/end-to-end-workflow.md) and [Architecture Details](docs/architecture.md).
+
 ```mermaid
-flowchart TD
-    U["Candidate profile + preferences"] --> CD["Daily company discovery"]
-    CD --> C[("Google Sheets<br/>Companies")]
-    C --> JD["Hourly official ATS job monitoring<br/>tier batches + eligibility gate"]
-    W["Official company careers / ATS"] --> JD
-    JD --> J[("Open Jobs<br/>prospective roles")]
-    JD --> S[("Scan Status<br/>per-company health")]
-    JD --> R[("Scan Runs<br/>receipts + checkpoints")]
-    J --> M["Fit review / JD evidence matching"]
-    P["Base resume(s) + Career Story Bank"] --> M
-    M --> CH{"Human chooses a role"}
-    CH --> T["Resume tailoring<br/>native Doc copy + PDF QA"]
-    T --> HA{"Human approves and submits"}
-    HA --> A[("Sheet1<br/>actual application records")]
-    GM["Gmail recruiting messages"] --> IT["Hourly inbox reconciliation"]
-    A <--> IT
-    IT --> G["Status precedence<br/>action flags + chronological notes"]
-    IT --> ML["Gmail labels / read / starred"]
-    D1["Python / SQLite ATS prototype<br/>separate local implementation"] -. "shared design ideas, not same deployed runtime" .-> JD
-    D2["Scheduler prompt generator<br/>separate authoring tool"] -. "generates templates, does not run tasks" .-> CD
+%%{init: {"flowchart": {"nodeSpacing": 64, "rankSpacing": 78, "padding": 30}, "themeVariables": {"fontSize": "17px"}}}%%
+flowchart TB
+    PROFILE["Candidate Profile<br/>Goals and preferences"]
+    CD["Company Discovery<br/>Daily scheduled task"]
+    COMPANIES[("Google Sheets<br/>Companies")]
+    ATS["Official Career Sites<br/>ATS job boards"]
+    JD["Job Discovery<br/>Hourly Tier batches"]
+    JOBS[("Google Sheets<br/>Open Jobs")]
+    LOGS[("Google Sheets<br/>Scan Status and Runs")]
+    REVIEW["JD Fit Review<br/>Choose target role"]
+    SOURCES["Base Resumes<br/>Career Story Bank"]
+    TAILOR["Resume Tailoring<br/>Google Doc and PDF QA"]
+    SUBMIT["Human Submits<br/>Job application"]
+    APPS[("Google Sheets<br/>Submitted applications")]
+    GMAIL["Gmail Recruiting<br/>Messages"]
+    INBOX["Inbox Tracker<br/>Hourly reconciliation"]
+    ACTIONS["Application Status<br/>Actions and notes"]
+
+    PROFILE --> CD --> COMPANIES --> JD
+    ATS --> JD
+    JD --> JOBS
+    JD -. "Log progress" .-> LOGS
+    JOBS --> REVIEW
+    PROFILE --> REVIEW
+    REVIEW --> TAILOR
+    SOURCES --> TAILOR
+    TAILOR --> SUBMIT --> APPS
+    GMAIL --> INBOX
+    APPS <--> INBOX
+    INBOX --> ACTIONS
 ```
 
 **Boundary matters:** the local Python/SQLite ATS collector is a manually triggered precursor; the Google Sheets schedules are a separate ChatGPT-tool-based runtime. Scheduler prompts are instructions, **not** a self-hosted worker or guaranteed notifications. **No application is submitted automatically.**
+
+**Diagram note:** Discovery, resume generation and Gmail tracking are **separate orchestrated workflows**, not one deployed service. The candidate manually submits applications. Google Sheets stores operational state, and Run/Status records support diagnosis.
 
 ## Three implementation repositories
 

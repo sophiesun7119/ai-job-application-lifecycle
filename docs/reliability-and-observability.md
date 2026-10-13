@@ -5,24 +5,43 @@ The evolved hourly discovery runtime moved from broad roster attempts toward **b
 ## Scheduling and coverage
 
 ```mermaid
-flowchart TD
-  A["Read company eligibility<br/>Active / Inactive / Cooldown"] --> B{"Eligible?"}
-  B -->|No| SK["Skip without scan failure"]
-  B -->|Yes| C["Restore last Coverage State<br/>tier / batch / assigned roster"]
-  C --> D["Assign up to 25 in one Tier"]
-  D --> E["Recheck company eligibility"]
-  E --> F{"Official company ATS actually checked?"}
-  F -->|Yes, enough evidence| CH["CHECKED"]
-  F -->|Attempted, insufficient evidence| BL["BLOCKED + observed reason"]
-  F -->|Not attempted / budget exhausted| NT["NOT_ATTEMPTED"]
-  CH --> W["Dedup and verify allowed writes"]
-  BL --> W
-  NT --> W
-  W --> R["Persist Scan Status + Scan Runs<br/>read back"]
-  R --> P{"All assigned checked<br/>and writes verified?"}
-  P -->|Yes| S["COMPLETED"]
-  P -->|No| T["PARTIAL / FAILED<br/>based on actual work"]
+%%{init: {"flowchart": {"nodeSpacing": 64, "rankSpacing": 78, "padding": 30}, "themeVariables": {"fontSize": "17px"}}}%%
+flowchart TB
+    ELIG["Read Company Status<br/>And eligibility date"]
+    IS_ELIG{"Eligible<br/>for this run?"}
+    SKIP["SKIPPED<br/>No scan failure"]
+    RESTORE["Restore Checkpoint<br/>Tier and batch"]
+    BATCH["Assign Up to 25<br/>One Tier per run"]
+    AGAIN{"Still eligible<br/>before site access?"}
+    ATTEMPT{"ATS source<br/>attempted?"}
+    NOT["NOT_ATTEMPTED<br/>No source check"]
+    EVIDENCE{"Enough fresh<br/>company evidence?"}
+    CHECKED["CHECKED<br/>Source reviewed"]
+    BLOCKED["BLOCKED<br/>Observed reason"]
+    WRITE["Dedup and Save<br/>Allowed job changes"]
+    RECEIPT["Save and Read Back<br/>Scan Status and Runs"]
+    DONE{"Coverage and writes<br/>fully verified?"}
+    COMPLETE["COMPLETED<br/>Run verified"]
+    PARTIAL["PARTIAL or FAILED<br/>Report actual work"]
+
+    ELIG --> IS_ELIG
+    IS_ELIG -->|No| SKIP
+    IS_ELIG -->|Yes| RESTORE --> BATCH --> AGAIN
+    AGAIN -->|No| SKIP
+    AGAIN -->|Yes| ATTEMPT
+    ATTEMPT -->|No| NOT
+    ATTEMPT -->|Yes| EVIDENCE
+    EVIDENCE -->|Yes| CHECKED
+    EVIDENCE -->|No| BLOCKED
+    CHECKED --> WRITE
+    BLOCKED --> WRITE
+    NOT --> WRITE
+    WRITE --> RECEIPT --> DONE
+    DONE -->|Yes| COMPLETE
+    DONE -->|No| PARTIAL
 ```
+
+The visual distinguishes **ineligible skips**, **assigned-but-unattempted**, and **attempted-but-blocked** outcomes. Real run classification and write verification depend on observed evidence; this is a design illustration, not a live run trace.
 
 ## Explicit classifications
 
