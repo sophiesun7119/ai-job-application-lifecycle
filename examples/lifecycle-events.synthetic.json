@@ -1,0 +1,67 @@
+{
+  "synthetic": true,
+  "events": [
+    {
+      "type": "job_discovered",
+      "at": "2026-10-01T09:00:00-05:00",
+      "company": "ExampleCloud",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "title": "Backend Platform Engineer",
+      "link": "https://example.com/jobs/demo-4201",
+      "open_jobs_review_status": "New"
+    },
+    {
+      "type": "job_rediscovered",
+      "at": "2026-10-02T09:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "observed_link": "https://example.com/jobs/demo-4201?utm_source=mock",
+      "expected_action": "dedup_no_append_preserve_first_seen"
+    },
+    {
+      "type": "human_selects_job",
+      "at": "2026-10-02T10:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "expected_action": "propose_evidence_backed_resume_edits_only"
+    },
+    {
+      "type": "human_approves_resume_copy",
+      "at": "2026-10-02T11:00:00-05:00",
+      "expected_action": "copy_original_doc_then_edit_approved_scope_pdf_page_count_only_if_rendered"
+    },
+    {
+      "type": "human_confirms_submission",
+      "at": "2026-10-03T12:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "expected_action": "upsert_one_submitted_application"
+    },
+    {
+      "type": "gmail_event",
+      "at": "2026-10-03T12:15:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "email_type": "Application Confirmation",
+      "expected_application_status": "Applied"
+    },
+    {
+      "type": "gmail_event",
+      "at": "2026-10-06T15:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "email_type": "OA",
+      "action_needed": "YES",
+      "expected_application_status": "OA"
+    },
+    {
+      "type": "human_update",
+      "at": "2026-10-07T16:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "note": "Assessment completed",
+      "expected_application_status": "Waiting"
+    },
+    {
+      "type": "late_email",
+      "at": "2026-10-07T17:00:00-05:00",
+      "job_key": "greenhouse:examplecloud:demo-4201",
+      "email_type": "Application Confirmation",
+      "expected_action": "preserve_waiting_no_regression"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "synthetic": true,
+  "source": "invented demonstration, not actual Google Sheet rows",
+  "rows": [
+    {
+      "Run ID": "mock-2026-10-01T09:00-05:00",
+      "Run Time": "2026-10-01T09:00:00-05:00",
+      "Tier": "B",
+      "Batch": "B2",
+      "Scheduled": 4,
+      "Checked": 2,
+      "Blocked": 1,
+      "Not Attempted": 1,
+      "New Added": 1,
+      "Material Updates": 0,
+      "Closed": 0,
+      "Run Status": "PARTIAL",
+      "Coverage State": {
+        "cycle_id": "mock-cycle-01",
+        "tier_order": [
+          "A",
+          "B",
+          "C"
+        ],
+        "assigned_by_tier": {
+          "A": [],
+          "B": [
+            "ExampleCloud",
+            "ExampleDB",
+            "DemoCloud",
+            "SampleWare"
+          ],
+          "C": []
+        },
+        "next_tier": "B",
+        "next_batch": 3
+      }
+    },
+    {
+      "Run ID": "mock-2026-10-01T10:00-05:00",
+      "Run Time": "2026-10-01T10:00:00-05:00",
+      "Tier": "B",
+      "Batch": "B3",
+      "Scheduled": 2,
+      "Checked": 2,
+      "Blocked": 0,
+      "Not Attempted": 0,
+      "New Added": 0,
+      "Material Updates": 1,
+      "Closed": 0,
+      "Run Status": "COMPLETED",
+      "Coverage State": {
+        "cycle_id": "mock-cycle-01",
+        "tier_order": [
+          "A",
+          "B",
+          "C"
+        ],
+        "assigned_by_tier": {
+          "A": [],
+          "B": [
+            "ExampleCloud",
+            "ExampleDB",
+            "DemoCloud",
+            "SampleWare"
+          ],
+          "C": []
+        },
+        "next_tier": "C",
+        "next_batch": 1
+      }
+    }
+  ],
+  "company_status_sample": [
+    {
+      "Company": "ExampleCloud",
+      "Tier": "B",
+      "Last Status": "CHECKED",
+      "Failure Count": 0,
+      "Last Failure": null,
+      "Reason Notes": ""
+    },
+    {
+      "Company": "ExampleDB",
+      "Tier": "B",
+      "Last Status": "BLOCKED",
+      "Failure Count": 2,
+      "Last Failure": "DYNAMIC_CONTENT",
+      "Reason Notes": "DYNAMIC_CONTENT x2"
+    },
+    {
+      "Company": "DemoCloud",
+      "Tier": "B",
+      "Last Status": "NOT_ATTEMPTED",
+      "Failure Count": 1,
+      "Last Failure": "NOT_ATTEMPTED",
+      "Reason Notes": "NOT_ATTEMPTED x1"
+    }
+  ]
+}

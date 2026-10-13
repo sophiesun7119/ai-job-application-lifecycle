@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "company": "ExampleCloud",
+  "provider": "Greenhouse (fictional example)",
+  "records": [
+    {
+      "job_id": "demo-4201",
+      "job_url": "https://example.com/jobs/demo-4201",
+      "title": "Backend Platform Engineer",
+      "work_mode": "US Remote",
+      "location": "United States",
+      "review_status": "New",
+      "first_seen": "2026-10-01",
+      "live_verified": false
+    },
+    {
+      "job_id": "demo-4201",
+      "job_url": "https://example.com/jobs/demo-4201?utm_source=test",
+      "title": "Backend Platform Engineer",
+      "work_mode": "US Remote",
+      "location": "United States",
+      "review_status": "New",
+      "first_seen": "2026-10-01",
+      "expected": "same_role_identity_not_new"
+    }
+  ]
+}
